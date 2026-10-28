@@ -1,0 +1,9 @@
+name = "fips202"
+version = "0.1.0"
+defaultTargets = ["Fips202", "Fips202Tests"]
+
+[[lean_lib]]
+name = "Fips202"
+
+[[lean_lib]]
+name = "Fips202Tests"
