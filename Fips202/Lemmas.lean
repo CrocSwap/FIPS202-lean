@@ -1,4 +1,8 @@
-import Fips202.Sp800185
+module
+
+public import Fips202.Sp800185
+
+@[expose] public section
 
 /-!
 # Structural lemmas

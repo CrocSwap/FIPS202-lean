@@ -1,3 +1,7 @@
+module
+
+
+@[expose] public section
 /-!
 # KECCAK-p[1600, nr] (FIPS 202 §3)
 

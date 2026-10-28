@@ -1,4 +1,8 @@
-import Fips202.Keccak
+module
+
+public import Fips202.Keccak
+
+@[expose] public section
 
 /-!
 # The sponge and the SHA-3 functions (FIPS 202 §4–6)

@@ -1,4 +1,7 @@
-import Fips202.Keccak
-import Fips202.Sponge
-import Fips202.Sp800185
-import Fips202.Lemmas
+module
+
+public import Fips202.Keccak
+public import Fips202.Sponge
+public import Fips202.Sp800185
+public import Fips202.Lemmas
+

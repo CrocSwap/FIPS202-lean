@@ -1,4 +1,8 @@
-import Fips202.Sponge
+module
+
+public import Fips202.Sponge
+
+@[expose] public section
 
 /-!
 # cSHAKE and KMAC (NIST SP 800-185)
