@@ -31,6 +31,10 @@ jobs:
           curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain leanprover/lean4:v4.35.0
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
       - name: Install compiler supervisor
-        run: python3 -m pip install "lean-buildtools @ git+https://github.com/CrocSwap/lean-buildtools.git@024d7809058e0a64d5af7e715389c387e245f824"
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/buildtools-venv"
+          "$RUNNER_TEMP/buildtools-venv/bin/python" -m pip install "lean-buildtools @ git+https://github.com/CrocSwap/lean-buildtools.git@024d7809058e0a64d5af7e715389c387e245f824"
+          echo "$RUNNER_TEMP/buildtools-venv/bin" >> "$GITHUB_PATH"
       - name: Compile specification and all 68 guards
         run: lean-buildtools build Fips202Tests --project . --output .lake/reports/ci-tests --memory 1400 --deny-sorry --no-mathlib-build
