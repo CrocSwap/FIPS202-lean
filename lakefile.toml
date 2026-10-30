@@ -1,6 +1,7 @@
 name = "fips202"
 version = "0.1.0"
 defaultTargets = ["Fips202", "Fips202Tests"]
+moreLeanArgs = ["-j1", "-M1400", "-DmaxHeartbeats=50000"]
 
 [[lean_lib]]
 name = "Fips202"

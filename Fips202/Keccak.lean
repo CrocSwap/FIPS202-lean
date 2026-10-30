@@ -103,4 +103,39 @@ def keccakP (nr : Nat) (A : State) : State :=
 /-- KECCAK-f[1600] = KECCAK-p[1600, 24] (§3.4). -/
 def keccakF (A : State) : State := keccakP 24 A
 
+/-! ## Equivalent executable permutation
+
+The mathematical definitions above remain unchanged. Compiler simplification
+uses the same permutation with the standard's 24 constants computed once.
+-/
+
+def roundConstantsFast : Vector UInt64 24 := Vector.ofFn fun i => roundConstant i.val
+
+def iotaFast (ir : Nat) (A : State) : State :=
+  A.set 0 (A[0] ^^^ (if h : ir < 24 then roundConstantsFast[ir] else roundConstant ir))
+
+theorem iotaFast_eq (ir : Nat) (A : State) : iotaFast ir A = iota ir A := by
+  unfold iotaFast
+  split
+  · simp [roundConstantsFast, iota]
+  · rfl
+
+def roundFast (ir : Nat) (A : State) : State := iotaFast ir (chi (pi (rho (theta A))))
+
+theorem roundFast_eq (ir : Nat) (A : State) : roundFast ir A = round ir A := by
+  exact iotaFast_eq ir _
+
+def keccakPFast (nr : Nat) (A : State) : State :=
+  (List.range nr).foldl (fun A k => roundFast (24 - nr + k) A) A
+
+theorem keccakPFast_eq (nr : Nat) (A : State) : keccakPFast nr A = keccakP nr A := by
+  simp only [keccakPFast, keccakP, roundFast_eq]
+
+def keccakFFast (A : State) : State := keccakPFast 24 A
+
+/-- Kernel definitions stay unchanged; compiled calls use the proved fast path. -/
+@[csimp] theorem keccakF_eq_fast : @keccakF = @keccakFFast := by
+  funext A
+  exact (keccakPFast_eq 24 A).symm
+
 end Fips202

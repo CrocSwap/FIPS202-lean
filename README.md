@@ -33,6 +33,24 @@ lake build          # builds the spec and checks every test vector
   Regenerate the OpenSSL-derived checks with
   `python3 scripts/gen_tests.py scripts/tests_head.lean scripts/tests_tail.lean Fips202Tests.lean`.
 
+## Executable path
+
+The mathematical definitions of `roundConstant`, `iota`, `round`, `keccakP`,
+`keccakF`, `squeezeBlocks`, and the hash functions are unchanged. Compiled
+execution uses proved equivalent companions through `@[csimp]`:
+
+- `keccakFFast` caches the 24 round constants computed by the original
+  `roundConstant` algorithm. `iotaFast` falls back to the original definition
+  outside rounds 0–23, so its equality holds for every natural round index.
+- `squeezeBlocksFast` omits the unused permutation after the final output
+  block. Its equality holds for every rate, state and block count.
+
+The equivalence lemmas are `keccakF_eq_fast` and `squeezeBlocks_eq_fast`.
+This preserves the definitions used by downstream proofs while making
+SHAKE-heavy specs such as SLH-DSA practical to execute. The affected modules
+compile and all FIPS202Tests pass. Build flags cap Lean at `-j1 -M1400`,
+with `maxHeartbeats=50000`.
+
 ## Conventions
 
 - State: `Vector UInt64 25`, lane `(x, y)` at index `x + 5y`; bit `z` of a

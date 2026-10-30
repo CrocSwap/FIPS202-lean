@@ -60,6 +60,29 @@ def squeezeBlocks (r : Nat) : State → Nat → List UInt8
   | _, 0 => []
   | A, n + 1 => A.bytes.take r ++ squeezeBlocks r (keccakF A) n
 
+/-- Same output blocks as `squeezeBlocks`, without evaluating an unused final
+permutation. This is an executable companion, not a change to the spec. -/
+def squeezeBlocksFast (r : Nat) : State → Nat → List UInt8
+  | _, 0 => []
+  | A, n + 1 => A.bytes.take r ++
+      (if n = 0 then [] else squeezeBlocksFast r (keccakF A) n)
+
+theorem squeezeBlocksFast_eq (r : Nat) (A : State) (n : Nat) :
+    squeezeBlocksFast r A n = squeezeBlocks r A n := by
+  induction n generalizing A with
+  | zero => rfl
+  | succ n ih =>
+    rw [squeezeBlocksFast, squeezeBlocks]
+    split
+    · rename_i hn
+      subst n
+      rfl
+    · rw [ih]
+
+@[csimp] theorem squeezeBlocks_eq_fast : @squeezeBlocks = @squeezeBlocksFast := by
+  funext r A n
+  exact (squeezeBlocksFast_eq r A n).symm
+
 /-- `SPONGE[KECCAK-f[1600], pad10*1, r]` with domain byte `d`, producing
 `L` bytes; `r` is the rate in bytes. -/
 def keccak (r : Nat) (d : UInt8) (M : List UInt8) (L : Nat) : List UInt8 :=
