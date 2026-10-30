@@ -1,5 +1,9 @@
 name = "fips202"
 version = "0.1.0"
+description = "Executable Lean specifications of SHA-3, SHAKE and SP 800-185"
+license = "Apache-2.0"
+licenseFiles = ["LICENSE", "NOTICE"]
+keywords = ["cryptography", "sha3", "shake", "formal-specification"]
 defaultTargets = ["Fips202", "Fips202Tests"]
 moreLeanArgs = ["-j1", "-M1400", "-DmaxHeartbeats=50000"]
 

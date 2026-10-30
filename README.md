@@ -5,9 +5,27 @@ functions built on it. Core Lean only (no Mathlib). Intended as the one
 shared definition that native kernels (CertiFFI leaves), circuit gadgets
 and protocol specs are proven against.
 
+Install [Elan](https://github.com/leanprover/elan), Git and a C compiler.
+`lean-toolchain` selects **Lean 4.35.0**.
+
 ```sh
-lake build          # builds the spec and checks every test vector
+git clone https://github.com/CrocSwap/FIPS202-lean.git
+cd FIPS202-lean
+lake build          # builds the specification and checks every test vector
 ```
+
+To use it in another Lake package:
+
+```toml
+[[require]]
+name = "fips202"
+git = "https://github.com/CrocSwap/FIPS202-lean.git"
+rev = "v0.1.0"
+```
+
+Import `Fips202`; for example, `Fips202.sha3_256 message` and
+`Fips202.shake128 message outputBytes` return `List UInt8`.
+For reproducible downstream builds, pin a full commit rather than a branch.
 
 ## Contents
 
@@ -62,8 +80,7 @@ with `maxHeartbeats=50000`.
   domain byte (`0x06` SHA3, `0x1F` SHAKE, `0x04` cSHAKE, `0x01` Keccak),
   per Appendix B.2.
 
-Status: **compiles, and all vectors pass.** No `sorry`; the only axioms are
-`propext` and `Quot.sound`.
+Status: **compiles, and all vectors pass.** The specification contains no `sorry`; no cryptographic security proof is claimed.
 
 ## Deferred checks
 
@@ -76,3 +93,16 @@ Status: **compiles, and all vectors pass.** No `sorry`; the only axioms are
   `Ethereum.Keccak256.hash` (qushta-evm, read-only), so it can depend on
   this package.
 - **Bit-length messages:** not supported; add only if a consumer needs them.
+
+
+## Sources and license
+
+Algorithms follow [FIPS 202](https://doi.org/10.6028/NIST.FIPS.202) and
+[NIST SP 800-185](https://doi.org/10.6028/NIST.SP.800-185). Test provenance and
+regeneration are described above. Hashlib comparisons use Python's independent
+OpenSSL-backed implementation; published examples do not constitute NIST
+validation of this package.
+
+Licensed under [Apache-2.0](LICENSE); see [NOTICE](NOTICE). Maintained by
+[Mister-Meeseeks](https://github.com/Mister-Meeseeks) in
+[CrocSwap](https://github.com/CrocSwap).

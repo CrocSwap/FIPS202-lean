@@ -1,3 +1,5 @@
+# Copyright 2026 CrocSwap
+# SPDX-License-Identifier: Apache-2.0
 import hashlib, sys
 msgs = [('[]', b''), ('abc', b'abc'), ('a3x200', bytes([0xa3])*200),
         ('range 135', bytes(range(135))), ('range 136', bytes(range(136))), ('range 137', bytes(range(137))),

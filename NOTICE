@@ -1,0 +1,7 @@
+FIPS202-lean
+Copyright 2026 CrocSwap
+
+Executable Lean specifications of FIPS 202 and NIST SP 800-185.
+Maintained by Mister-Meeseeks: https://github.com/Mister-Meeseeks
+
+Standards and published example values are attributed in README.md.
