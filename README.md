@@ -20,7 +20,7 @@ To use it in another Lake package:
 [[require]]
 name = "fips202"
 git = "https://github.com/CrocSwap/FIPS202-lean.git"
-rev = "v0.1.0"
+rev = "27f7e51c0c7890dfce534b528f4858972c5eced4"
 ```
 
 Import `Fips202`; for example, `Fips202.sha3_256 message` and

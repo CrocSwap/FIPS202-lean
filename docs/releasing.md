@@ -1,7 +1,8 @@
 # Releasing FIPS202-lean
 
 The initial target is `CrocSwap/FIPS202-lean`, version `0.1.0`, under Apache-2.0.
-Repository creation, pushes and GitHub releases are separate publication steps.
+Initial publication is repositories only: no tags or GitHub releases. The package
+version is metadata, and downstream examples use a full commit pin.
 
 Before publication, build with Lean 4.35.0 and check the 68 guards:
 
@@ -15,16 +16,14 @@ are included. For supervised development builds, use lean-buildtools with
 
 Publish this repository before FIPS203-lean: its Lake dependency names an exact
 commit here. Keep that dependency commit reachable on the public main branch.
-An authorized CrocSwap maintainer can then create/push the repository and tag:
+An authorized CrocSwap maintainer can then create and push the repository:
 
 ```sh
 gh repo create CrocSwap/FIPS202-lean --public --source . --remote origin
-git push -u origin main
-git tag -a v0.1.0 -m 'FIPS202-lean v0.1.0'
-git push origin v0.1.0
-gh release create v0.1.0 --repo CrocSwap/FIPS202-lean --verify-tag --title 'FIPS202-lean v0.1.0' --notes-file CHANGELOG.md
+git -c push.followTags=false push -u origin main
 ```
 
-If the repository or tag already exists, inspect it before changing anything.
+If the repository already exists, inspect it before changing anything.
 After publishing, check the GitHub CI run and reproduce a clean `lake build`
-from the public URL. Do not move a published dependency pin or release tag.
+from the public URL. Keep published dependency commits reachable and immutable.
+Creating a tag or GitHub release requires a separate instruction.
